@@ -1,10 +1,25 @@
+buildscript {
+    ext.kotlin_version = "1.7.20"
+    repositories {
+        google()
+        mavenCentral()
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.0.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
 plugins {
     id 'com.android.library'
+    id 'maven-publish'
 }
 
 android {
     namespace 'com.alpha.common.utility'
     compileSdk 33
+    buildToolsVersion "33.0.0"
 
     defaultConfig {
         minSdk 24
@@ -29,6 +44,17 @@ android {
     }
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.5.1'
@@ -43,4 +69,24 @@ dependencies {
     implementation "com.airbnb.android:lottie:$lottieVersion"
 
     implementation 'com.intuit.sdp:sdp-android:1.1.0'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.github.YashKuvadiya'
+            artifactId = 'CommonUtils'
+            version = "1.0.0"
+
+            artifact("$buildDir/outputs/aar/CommonUtils-release.aar")
+            pom {
+                description = 'CommonUtils'
+            }
+        }
+    }
+    repositories {
+        maven {
+            url = uri("$buildDir/repo")
+        }
+    }
 }
