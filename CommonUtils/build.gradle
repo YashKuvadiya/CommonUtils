@@ -68,7 +68,7 @@ dependencies {
     def lottieVersion = "6.3.0"
     implementation "com.airbnb.android:lottie:$lottieVersion"
 
-    implementation 'com.intuit.sdp:sdp-android:1.1.0'
+    implementation 'com.intuit.sdp:sdp-android:1.1.1'
 }
 
 publishing {
@@ -76,7 +76,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'com.github.YashKuvadiya'
             artifactId = 'CommonUtils'
-            version = "1.0.0"
+            version = "1.0.1"
 
             artifact("$buildDir/outputs/aar/CommonUtils-release.aar")
             pom {

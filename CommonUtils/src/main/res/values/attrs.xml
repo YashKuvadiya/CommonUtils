@@ -26,18 +26,24 @@
         </attr>
         <attr name="cil_progress_bar_size" format="dimension"/>
     </declare-styleable>
-    <declare-styleable name="CommonToolBar">
+    <declare-styleable name="CommonToolbar">
+        <attr name="tb_headerBg" format="reference|color"/>
         <attr name="tb_backVisibility" format="boolean"/>
-        <attr name="tb_titleVisibility" format="boolean"/>
-        <attr name="tb_walletVisibility" format="boolean"/>
-        <attr name="tb_historyVisibility" format="boolean"/>
-        <attr name="tb_pointsTextColor" format="color"/>
-        <attr name="tb_titleTextColor" format="color"/>
-        <attr name="tb_walletBackgroundTint" format="color"/>
-        <attr name="tb_backIconSrcTint" format="color"/>
-        <attr name="tb_historyIconTint" format="color"/>
-        <attr name="tb_walletBackground" format="reference"/>
         <attr name="tb_backIconSrc" format="reference"/>
+        <attr name="tb_backIconSrcTint" format="reference|color"/>
+        <attr name="tb_titleVisibility" format="boolean"/>
+        <attr name="tb_titleTextColor" format="reference|color"/>
+        <attr name="tb_titleTextFont" format="reference"/>
+        <attr name="tb_titleText" format="string"/>
+        <attr name="tb_walletVisibility" format="boolean"/>
+        <attr name="tb_walletBackgroundTint" format="reference|color"/>
+        <attr name="tb_walletBackground" format="reference|color"/>
+        <attr name="tb_walletCoinSrc" format="reference"/>
+        <attr name="tb_pointsTextColor" format="reference|color"/>
+        <attr name="tb_pointsText" format="string"/>
+        <attr name="tb_pointsTextFont" format="reference"/>
+        <attr name="tb_historyVisibility" format="boolean"/>
         <attr name="tb_historyIconSrc" format="reference"/>
+        <attr name="tb_historyIconTint" format="reference|color"/>
     </declare-styleable>
 </resources>

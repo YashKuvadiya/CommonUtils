@@ -1,19 +1,32 @@
 package com.alpha.common.utility;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.app.DownloadManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
@@ -27,6 +40,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.airbnb.lottie.LottieListener;
@@ -48,6 +65,9 @@ public class CommonUtilities {
     public static final String DATE_FORMAT_FULL_DATE = "MMMM dd, yyyy";
     public static final String DATE_FORMAT_SHORT_DATE = "dd/MM/yy";
     public static final String GSF_ANDROID_ID_URI = "content://com.google.android.gsf.gservices";
+    private static final String CHANNEL_ID = "APK_DOWNLOAD_CHANNEL";
+    private static final int NOTIFICATION_ID = 1;
+
 
     public static boolean isStringNullOrEmpty(String text) {
         return (text == null || text.trim().equals("null") || text.trim()
@@ -199,6 +219,7 @@ public class CommonUtilities {
 
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
     }
+
     public static void fullScreenThemeStatusBar(Activity activity, int statusColor) {
         Window window = activity.getWindow();
 //        Drawable background = activity.getDrawable(headerBg);
@@ -209,21 +230,27 @@ public class CommonUtilities {
 
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
     }
+
     public static String CurrentDateStandard() {
         return new SimpleDateFormat(DATE_FORMAT_STANDARDIZED_UTC).format(new Date());
     }
+
     public static String CurrentDateShort() {
         return new SimpleDateFormat(DATE_FORMAT_SHORT_DATE).format(new Date());
     }
+
     public static String CurrentDateFullDate() {
         return new SimpleDateFormat(DATE_FORMAT_FULL_DATE).format(new Date());
     }
+
     public static String CurrentDateUsa() {
         return new SimpleDateFormat(DATE_FORMAT_USA).format(new Date());
     }
+
     public static String CurrentDateRegular() {
         return new SimpleDateFormat(DATE_FORMAT_REGULAR).format(new Date());
     }
+
     public static String GetAndroidId(Context context) {
         try {
             Uri URI = Uri.parse(GSF_ANDROID_ID_URI);
@@ -255,6 +282,7 @@ public class CommonUtilities {
         }
         return "";
     }
+
     public static void setEnableDisable(final Activity activity, View v) {
         v.setEnabled(false);
         Timer buttonTimer = new Timer();
@@ -270,11 +298,13 @@ public class CommonUtilities {
             }
         }, 2000);
     }
+
     public static boolean InternetAvailable(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
     public static boolean isDeveloperModeEnabled(Context context) {
         if (!BuildConfig.DEBUG) {
             int devMode = Settings.Global.getInt(
@@ -286,6 +316,7 @@ public class CommonUtilities {
         }
         return false;
     }
+
     public static void TextCountAnimation(TextView tvPoint, String welcomePoint) {
         ValueAnimator animator = ValueAnimator.ofInt(0, Integer.parseInt(welcomePoint));
         animator.setDuration(1500);
@@ -296,6 +327,7 @@ public class CommonUtilities {
         });
         animator.start();
     }
+
     public static void CoinAnimationDeduct(Context context, RelativeLayout layoutMain, LinearLayout layoutPoints, int ic_coin) {
         int i;
         float f;
@@ -386,6 +418,7 @@ public class CommonUtilities {
         }
         animatorSet.start();
     }
+
     public static String ConvertPointsToRupees(String Points, String PointsValue, String currency) {
         try {
             double calRupees = (Double.parseDouble(Points) * 1) / Double.parseDouble(PointsValue);
@@ -401,6 +434,7 @@ public class CommonUtilities {
         }
         return "";
     }
+
     public static class CommonLogger {
         private static CommonLogger instance = new CommonLogger();
         private boolean isLogEnabled = false;
@@ -447,51 +481,143 @@ public class CommonUtilities {
             if (isLogEnabled) Log.v(a, b);
         }
     }
-//    public static void AppUpdateDialog(final Activity activity, String isForceUpdate, final String appUrl, String updateMessage) {
-//        try {
-//            if (activity != null) {
-//                final Dialog dialog1 = new Dialog(activity, android.R.style.Theme_Light);
-//                dialog1.getWindow().setBackgroundDrawableResource(R.color.blackTransparent);
-//                dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//                dialog1.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//                dialog1.setContentView(R.layout.dialog_update_app);
-//
-//                Button btnUpdate = dialog1.findViewById(R.id.btnUpdate);
-//                Button btnCancel = dialog1.findViewById(R.id.btnCancel);
-//                TextView tvMessage = dialog1.findViewById(R.id.tvMessage);
-//                tvMessage.setText(updateMessage);
-//                if (isForceUpdate.equals("1")) {
-//                    dialog1.setCancelable(false);
-//                    btnUpdate.setVisibility(View.VISIBLE);
-//                    btnCancel.setVisibility(View.GONE);
-//                } else {
-//                    dialog1.setCancelable(true);
-//                    btnUpdate.setVisibility(View.VISIBLE);
-//                    btnCancel.setVisibility(View.VISIBLE);
-//                }
-//                btnUpdate.setOnClickListener(v -> {
-//                    if (!activity.isFinishing() && !isForceUpdate.equals("1")) {
-//                        dialog1.dismiss();
-//                    }
-//                    try {
-//                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(appUrl));
-//                        activity.startActivity(browserIntent);
-//                    } catch (ActivityNotFoundException e) {
-//                        Toast.makeText(activity, "No application can handle this request." + " Please install a web browser", Toast.LENGTH_LONG).show();
-//                        e.printStackTrace();
-//                    }
-//                });
-//                btnCancel.setOnClickListener(view -> {
-//                    if (!activity.isFinishing()) {
-//                        dialog1.dismiss();
-//                    }
-//                });
-//                if (!activity.isFinishing()) {
-//                    dialog1.show();
-//                }
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+
+    public static void downloadAndInstallAPK(Context context, String url, String appName, String versionName, int drawable, DownloadCallback callback) {
+
+        createNotificationChannel(context, appName, versionName);
+
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
+        request.setTitle(appName);
+        request.setDescription(versionName);
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalFilesDir(context, Environment.DIRECTORY_DOWNLOADS, appName + ".apk");
+        request.setMimeType("application/vnd.android.package-archive");
+
+        DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+        long downloadId = downloadManager.enqueue(request);
+
+        context.registerReceiver(new DownloadReceiver(downloadId, context, callback), new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
+        trackDownloadProgress(downloadManager, downloadId, context, appName, versionName, drawable, callback);
+    }
+
+    private static void createNotificationChannel(Context context, String appName, String versionName) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = appName;
+            String description = versionName;
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    public static void trackDownloadProgress(DownloadManager downloadManager, long downloadId, Context context, String appName, String versionName, int drawable, DownloadCallback callback) {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                DownloadManager.Query query = new DownloadManager.Query();
+                query.setFilterById(downloadId);
+                Cursor cursor = downloadManager.query(query);
+                if (cursor.moveToFirst()) {
+                    int bytesDownloaded = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
+                    int totalBytes = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+
+                    if (totalBytes > 0) {
+                        int progress = (int) ((bytesDownloaded * 100L) / totalBytes);
+                        Toast.makeText(context, "Download progress: " + progress + "%", Toast.LENGTH_SHORT).show();
+                        updateNotification(context, progress, appName, versionName, drawable);
+                        callback.onProgress(progress);
+
+                        if (bytesDownloaded < totalBytes) {
+                            handler.postDelayed(this, 40); // Check every second
+                        } else {
+                            // Download complete
+                            dismissNotification(context);
+                            if (callback != null) {
+                                callback.onDownloadComplete();
+                                callback.onInstallStarted();
+                            }
+                        }
+                    }
+                }
+                cursor.close();
+            }
+        }, 100); // Initial delay of 1 second
+    }
+    private static void dismissNotification(Context context) {
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        notificationManager.cancel(NOTIFICATION_ID);
+    }
+    private static void updateNotification(Context context, int progress, String title, String version, int drawable) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(drawable) // Replace with your app icon
+                .setContentTitle(title)
+                .setContentText(version)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setProgress(100, progress, false);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        notificationManager.notify(NOTIFICATION_ID, builder.build());
+    }
+
+    public interface DownloadCallback {
+        void onProgress(int progress);
+
+        void onDownloadComplete();
+
+        void onInstallStarted();
+    }
+
+    private static class DownloadReceiver extends BroadcastReceiver {
+        private long downloadId;
+        private Context context;
+        private DownloadCallback callback;
+
+        public DownloadReceiver(long downloadId, Context context, DownloadCallback callback) {
+            this.downloadId = downloadId;
+            this.context = context;
+            this.callback = callback;
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+            if (downloadId == id) {
+                DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+                Uri uri = downloadManager.getUriForDownloadedFile(downloadId);
+
+                if (uri != null) {
+                    if (callback != null) {
+                        callback.onDownloadComplete();
+                        callback.onInstallStarted();
+                    }
+                    installAPK(context, uri);
+                } else {
+                    Toast.makeText(context, "Download failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    private static void installAPK(Context context, Uri uri) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, "application/vnd.android.package-archive");
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        context.startActivity(intent);
+    }
 }

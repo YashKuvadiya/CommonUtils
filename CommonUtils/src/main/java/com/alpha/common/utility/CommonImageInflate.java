@@ -76,7 +76,7 @@ public class CommonImageInflate extends RelativeLayout {
             lottieAutoPlay = typedArray.getBoolean(R.styleable.CommonImageInflate_cil_lottie_auto_play, true);
             imageScaleType = typedArray.getInt(R.styleable.CommonImageInflate_cil_image_scale_type, 1);
             lottieScaleType = typedArray.getInt(R.styleable.CommonImageInflate_cil_lottie_scale_type, 1);
-            progressBarSize = typedArray.getDimension(R.styleable.CommonImageInflate_cil_progress_bar_size, 0);
+            progressBarSize = typedArray.getDimension(R.styleable.CommonImageInflate_cil_progress_bar_size, 44);
         } finally {
             typedArray.recycle();
         }
