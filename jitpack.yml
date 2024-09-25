@@ -4,4 +4,4 @@ before_install:
     - ./script/prepareJitpackEnvironment.sh
 install:
     - FILE="-Dfile=CommonUtils-release.aar"
-    - mvn install:install-file $FILE -DgroupId=com.github.YashKuvadiya -DartifactId=CommonUtils -Dversion=1.0.3 -Dpackaging=aar -DgeneratePom=true
+    - mvn install:install-file $FILE -DgroupId=com.github.YashKuvadiya -DartifactId=CommonUtils -Dversion=1.0.4 -Dpackaging=aar -DgeneratePom=true
