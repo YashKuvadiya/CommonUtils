@@ -2,4 +2,16 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="red">#C61D24</color>
+    <color name="blackTransparentDark">#CC000000</color>
+    <color name="green">#006400</color>
+    <color name="walletPoints">#FFDB06</color>
+    <color name="footerColorDe">#ABABAB</color>
+    <color name="orange">#FF6B00</color>
+    <item name="darkBlue" type="color">#FF0099CC</item>
+    <item name="darkPurple" type="color">#FF9933CC</item>
+    <item name="darkGreen" type="color">#FF669900</item>
+    <item name="darkOrange" type="color">#FFFF8800</item>
+
+    <color name="successGreen">#5CB85C</color>
 </resources>

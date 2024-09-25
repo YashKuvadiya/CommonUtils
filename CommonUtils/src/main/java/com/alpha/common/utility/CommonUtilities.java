@@ -526,10 +526,9 @@ public class CommonUtilities {
                 if (cursor.moveToFirst()) {
                     int bytesDownloaded = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
                     int totalBytes = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
-
                     if (totalBytes > 0) {
                         int progress = (int) ((bytesDownloaded * 100L) / totalBytes);
-                        Toast.makeText(context, "Download progress: " + progress + "%", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(context, "Download progress: " + progress + "%", Toast.LENGTH_SHORT).show();
                         updateNotification(context, progress, appName, versionName, drawable);
                         callback.onProgress(progress);
 
@@ -547,7 +546,7 @@ public class CommonUtilities {
                 }
                 cursor.close();
             }
-        }, 100); // Initial delay of 1 second
+        }, 1000); // Initial delay of 1 second
     }
     private static void dismissNotification(Context context) {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);

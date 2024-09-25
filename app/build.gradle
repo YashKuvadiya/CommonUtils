@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace 'com.pocket.money.myapplication'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.pocket.money.myapplication"

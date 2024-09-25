@@ -4,7 +4,9 @@ import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -21,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver onDownloadComplete;
     private long downloadID;
     private DownloadManager downloadManager;
+    private IntentFilter intentFilterActivities;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +73,13 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 //        registerBroadcast();
     }
+//    private void registerBroadcast() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            registerReceiver(intentFilterActivities,RECEIVER_NOT_EXPORTED);
+//        } else {
+//            registerReceiver(appOpenAddLoadedBroadcast, intentFilterActivities);
+//        }
+//    }
 
 //    public void registerBroadcast() {
 //        Log.e("registerBroadcast","Entered");
