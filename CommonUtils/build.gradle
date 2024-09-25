@@ -31,7 +31,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -76,7 +76,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'com.github.YashKuvadiya'
             artifactId = 'CommonUtils'
-            version = "1.0.4"
+            version = "1.0.5"
 
             artifact("$buildDir/outputs/aar/CommonUtils-release.aar")
             pom {
