@@ -76,7 +76,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'com.github.YashKuvadiya'
             artifactId = 'CommonUtils'
-            version = "1.0.2"
+            version = "1.0.3"
 
             artifact("$buildDir/outputs/aar/CommonUtils-release.aar")
             pom {
